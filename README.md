@@ -6,3 +6,9 @@
 
 ### Ejecutar
 `node app.js`
+
+### Integrantes
+'Santos Bogo'
+'Ignacio Chevallier'
+'Tomás Valle Duran'
+'Matias Chialva'
