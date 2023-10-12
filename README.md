@@ -7,7 +7,7 @@
 ### Ejecutar
 `node app.js`
 
-### Integrantes
+### Integrantes 
 `Santos Bogo`
 `Ignacio Chevallier`
 `Tomás Valle Duran`
