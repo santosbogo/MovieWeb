@@ -8,7 +8,7 @@
 `node app.js`
 
 ### Integrantes
-´Santos Bogo´
-´Ignacio Chevallier´
-´Tomás Valle Duran´
-´Matias Chialva´
+`Santos Bogo`
+`Ignacio Chevallier`
+`Tomás Valle Duran`
+`Matias Chialva`
