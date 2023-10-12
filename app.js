@@ -23,8 +23,6 @@ app.get('/', (req, res) => {
 app.get('/buscar', (req, res) => {
     const searchTerm = req.query.q;
 
-    //Hola santos
-
     // Realizar la búsqueda en la base de datos
     db.all(
         'SELECT * FROM movie WHERE title LIKE ?',
