@@ -22,12 +22,20 @@ app.get('/', (req, res) => {
 // Ruta para buscar películas
 app.get('/buscar', (req, res) => {
     const searchTerm = req.query.q;
+    const query = `
+    SELECT * FROM movie WHERE title LIKE ? UNION -- Consulta por título
+    SELECT * FROM movie WHERE movie.movie_id IN (SELECT movie_id -- Consulta por nombre de actor, cast
+                                                FROM movie_cast AS MCast
+                                                JOIN person AS P ON MCast.person_id = P.person_id
+                                                WHERE person_name LIKE ?) UNION
+    SELECT * FROM movie WHERE movie.movie_id IN (SELECT movie_id -- Consulta por nombre de director, crew
+                                                FROM person AS P
+                                                JOIN movie_crew AS MCrew ON MCrew.person_id = P.person_id
+                                                WHERE person_name LIKE ? AND job = 'Director')
+  `;
 
     // Realizar la búsqueda en la base de datos
-    db.all(
-        'SELECT * FROM movie WHERE title LIKE ?',
-        [`%${searchTerm}%`],
-        (err, rows) => {
+    db.all(query, [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`], (err, rows) => {
             if (err) {
                 console.error(err);
                 res.status(500).send('Error en la búsqueda.');
