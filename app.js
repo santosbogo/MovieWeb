@@ -22,29 +22,63 @@ app.get('/', (req, res) => {
 // Ruta para buscar películas
 app.get('/buscar', (req, res) => {
     const searchTerm = req.query.q;
-    const query = `
-    SELECT * FROM movie WHERE title LIKE ? UNION -- Consulta por título
-    SELECT * FROM movie WHERE movie.movie_id IN (SELECT movie_id -- Consulta por nombre de actor, cast
-                                                FROM movie_cast AS MCast
-                                                JOIN person AS P ON MCast.person_id = P.person_id
-                                                WHERE person_name LIKE ?) UNION
-    SELECT * FROM movie WHERE movie.movie_id IN (SELECT movie_id -- Consulta por nombre de director, crew
-                                                FROM person AS P
-                                                JOIN movie_crew AS MCrew ON MCrew.person_id = P.person_id
-                                                WHERE person_name LIKE ? AND job = 'Director')
-  `;
 
-    // Realizar la búsqueda en la base de datos
-    db.all(query, [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`], (err, rows) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send('Error en la búsqueda.');
-            } else {
-                res.render('resultado', { movies: rows });
-            }
+    // Create an object to store the results for each category
+    const results = {
+        movies: [],
+        actors: [],
+        directors: [],
+    };
+
+    // Search for movies
+    const movieQuery = `
+        SELECT DISTINCT title
+        FROM movie 
+        WHERE title LIKE ?;
+    `;
+
+    // Search for actors with "George" in their names
+    const actorQuery = `
+        SELECT DISTINCT person_name
+        FROM person
+        JOIN movie_cast on person.person_id = movie_cast.person_id
+        WHERE person_name LIKE ?;
+    `;
+
+    // Search for directors with "George" in their names
+    const directorQuery = `
+        SELECT DISTINCT person_name
+        FROM person
+        JOIN movie_crew on person.person_id = movie_crew.person_id
+        WHERE person_name LIKE ?;
+    `;
+
+    // Execute the movie query
+    db.all(movieQuery, [`%${searchTerm}%`], (err, movieRows) => {
+        if (!err) {
+            results.movies = movieRows;
         }
-    );
+
+        // Execute the actor query
+        db.all(actorQuery, [`%${searchTerm}%`], (err, actorRows) => {
+            if (!err) {
+                results.actors = actorRows;
+            }
+
+            // Execute the director query
+            db.all(directorQuery, [`%${searchTerm}%`], (err, directorRows) => {
+                if (!err) {
+                    results.directors = directorRows;
+                }
+
+                // Render the results page and pass the results object
+                res.render('resultado', { results });
+            });
+        });
+    });
 });
+
+
 
 // Ruta para la página de datos de una película particular
 app.get('/pelicula/:id', (req, res) => {
