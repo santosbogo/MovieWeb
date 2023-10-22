@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-// Ruta para buscar películas
+// Ruta para buscar películas, actores y directores
 app.get('/buscar', (req, res) => {
     const searchTerm = req.query.q;
 
@@ -32,22 +32,22 @@ app.get('/buscar', (req, res) => {
 
     // Search for movies
     const movieQuery = `
-        SELECT DISTINCT title
+        SELECT DISTINCT *
         FROM movie 
         WHERE title LIKE ?;
     `;
 
-    // Search for actors with "George" in their names
+    // Search for actors with pattern in their names
     const actorQuery = `
-        SELECT DISTINCT person_name
+        SELECT DISTINCT person_name, person.person_id
         FROM person
         JOIN movie_cast on person.person_id = movie_cast.person_id
         WHERE person_name LIKE ?;
     `;
 
-    // Search for directors with "George" in their names
+    // Search for directors with pattern in their names
     const directorQuery = `
-        SELECT DISTINCT person_name
+        SELECT DISTINCT person_name, person.person_id
         FROM person
         JOIN movie_crew on person.person_id = movie_crew.person_id
         WHERE person_name LIKE ?;
@@ -86,7 +86,7 @@ app.get('/pelicula/:id', (req, res) => {
 
     // Consulta SQL para obtener los datos de la película, elenco y crew
     const query = `
-    SELECT
+    SELECT DISTINCT
       movie.*,
       actor.person_name as actor_name,
       actor.person_id as actor_id,
@@ -95,13 +95,31 @@ app.get('/pelicula/:id', (req, res) => {
       movie_cast.character_name,
       movie_cast.cast_order,
       department.department_name,
-      movie_crew.job
+      movie_crew.job,
+      genre.genre_name,
+      country.country_name,
+      production_company.company_name,
+      keyword.keyword_name,
+      language_role.language_role,
+      language.language_name
     FROM movie
     LEFT JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
     LEFT JOIN person as actor ON movie_cast.person_id = actor.person_id
     LEFT JOIN movie_crew ON movie.movie_id = movie_crew.movie_id
     LEFT JOIN department ON movie_crew.department_id = department.department_id
     LEFT JOIN person as crew_member ON crew_member.person_id = movie_crew.person_id
+
+    left join movie_genres on movie.movie_id = movie_genres.movie_id
+    left join genre on movie_genres.genre_id = genre.genre_id
+    left join production_country on movie.movie_id = production_country.movie_id
+    left join country on production_country.country_id = country.country_id
+    left join movie_company on movie.movie_id = movie_company.movie_id
+    left join production_company on movie_company.company_id = production_company.company_id
+    left join movie_keywords on movie.movie_id = movie_keywords.movie_id
+    left join keyword on movie_keywords.keyword_id = keyword.keyword_id
+    left join movie_languages on movie.movie_id = movie_languages.movie_id
+    left join language_role on movie_languages.language_role_id = language_role.role_id
+    left join language on movie_languages.language_id = language.language_id
     WHERE movie.movie_id = ?
   `;
 
@@ -123,6 +141,10 @@ app.get('/pelicula/:id', (req, res) => {
                 writers: [],
                 cast: [],
                 crew: [],
+                genres: [],
+                companies: [],
+                keywords: [],
+                languages: [],
             };
 
             // Crear un objeto para almacenar directores
@@ -211,6 +233,37 @@ app.get('/pelicula/:id', (req, res) => {
                             });
                         }
                     }
+                }
+            });
+
+            rows.forEach((row) => {
+                // Add genre
+                if (row.genre_name && !movieData.genres.includes(row.genre_name)) {
+                    movieData.genres.push(row.genre_name);
+                }
+
+                // Add production company and country
+                if (row.company_name && row.country_name) {
+                    const companyInfo = {
+                        company_name: row.company_name,
+                        country_name: row.country_name
+                    };
+
+                    if (!movieData.companies.some((company) =>
+                        company.company_name === companyInfo.company_name &&
+                        company.country_name === companyInfo.country_name)) {
+                        movieData.companies.push(companyInfo);
+                    }
+                }
+
+                // Add keyword
+                if (row.keyword_name && !movieData.keywords.includes(row.keyword_name)) {
+                    movieData.keywords.push(row.keyword_name);
+                }
+
+                // Add language
+                if (row.language_name && !movieData.languages.includes(row.language_name)) {
+                    movieData.languages.push(row.language_name);
                 }
             });
 

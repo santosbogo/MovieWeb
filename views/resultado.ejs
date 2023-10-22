@@ -23,7 +23,7 @@
         <h2>Actores</h2>
         <ul>
             <% results.actors.forEach((actor) => { %>
-                <li><a href="/actor/<%= actor.actor_id %>"><%= actor.person_name %></a></li>
+                <li><a href="/actor/<%= actor.person_id %>"><%= actor.person_name %></a></li>
             <% }); %>
         </ul>
     <% } %>
@@ -32,7 +32,7 @@
         <h2>Directores</h2>
         <ul>
             <% results.directors.forEach((director) => { %>
-                <li><a href="/director/<%= director.director_id %>"><%= director.person_name %></a></li>
+                <li><a href="/director/<%= director.person_id %>"><%= director.person_name %></a></li>
             <% }); %>
         </ul>
     <% } %>
