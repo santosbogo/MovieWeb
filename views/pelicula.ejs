@@ -5,45 +5,56 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<h1><%= movie.title %></h1>
+<h1 style="background-color: #FFF2D8;  padding: 10px;  border-radius: 5px;"><%= movie.title %></h1>
 <h3>Fecha: <%= movie.release_date %></h3>
 
-<h3>Dirigida por: </h3>
-<ul>
-    <% movie.directors.forEach((director) => { %>
-        <li>
-            <a href="/director/<%= director.crew_member_id %>"><%= director.crew_member_name %></a>
-        </li>
-    <% }); %>
-</ul>
+<div class="director-writer-container">
+    <div class="director-column">
+        <h3>Dirigida por:</h3>
+        <ul>
+            <% movie.directors.forEach((director) => { %>
+                <li>
+                    <a href="/director/<%= director.crew_member_id %>"><%= director.crew_member_name %></a>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
 
-<h3>Escrita por: </h3>
-<ul>
-    <% movie.writers.forEach((writer) => { %>
-        <li>
-            <%= writer.crew_member_name %>
-        </li>
-    <% }); %>
-</ul>
+    <div class="writer-column">
+        <h3>Escrita por:</h3>
+        <ul>
+            <% movie.writers.forEach((writer) => { %>
+                <li>
+                    <%= writer.crew_member_name %>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</div>
+
 
 <h3>Argumento:</h3>
-<div id="overview"><p><%= movie.overview %></p></div>
+<div id="overview" style="background-color: #FFFADD; padding: 20px; border-radius: 10px;" ><p><%= movie.overview %></p></div>
 
 <h3>Elenco:</h3>
-<ul>
+<div class="cast-container">
     <% movie.cast.sort((a, b) => a.cast_order - b.cast_order).forEach((actor) => { %>
-        <li><a href="/actor/<%= actor.actor_id %>"><%= actor.actor_name %></a> - <%= actor.character_name %></li>
+        <div class="cast-item">
+            <a href="/actor/<%= actor.actor_id %>"><%= actor.actor_name %></a> - <%= actor.character_name %>
+        </div>
     <% }); %>
-</ul>
+</div>
+
 
 <h3>Crew:</h3>
-<ul>
+<div class="crew-container">
     <% movie.crew.forEach((crewMember) => { %>
-        <li>
+        <div class="crew-item">
             <%= crewMember.crew_member_name %> - <%= crewMember.department_name %> (<%= crewMember.job %>)
-        </li>
+        </div>
     <% }); %>
-</ul>
+</div>
+
 
 <h3>Géneros:</h3>
 <ul>
@@ -74,6 +85,6 @@
 </ul>
 
 <p></p>
-<div id="inicio"><a href="/">Inicio</a></div>
+<div><a href="/"><button type="button" id="inicio" style="margin-bottom: 15px">Inicio</button></a></div>
 </body>
 </html>
