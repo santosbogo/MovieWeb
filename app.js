@@ -28,29 +28,43 @@ app.get('/buscar', (req, res) => {
         movies: [],
         actors: [],
         directors: [],
+        keywords : [],
     };
 
     // Search for movies
     const movieQuery = `
-        SELECT DISTINCT *
-        FROM movie 
-        WHERE title LIKE ?;
+        select distinct *
+        from movie 
+        where title like ?
+        order by title asc;
     `;
 
     // Search for actors with pattern in their names
     const actorQuery = `
-        SELECT DISTINCT person_name, person.person_id
-        FROM person
-        JOIN movie_cast on person.person_id = movie_cast.person_id
-        WHERE person_name LIKE ?;
+        select distinct person_name, p.person_id
+        from person p
+        join movie_cast mc on p.person_id = mc.person_id
+        where person_name like ?
+        order by person_name asc;
     `;
 
     // Search for directors with pattern in their names
     const directorQuery = `
-        SELECT DISTINCT person_name, person.person_id
-        FROM person
-        JOIN movie_crew on person.person_id = movie_crew.person_id
-        WHERE person_name LIKE ?;
+        select distinct person_name, p.person_id
+        from person p
+        join movie_crew mc on p.person_id = mc.person_id
+        where person_name like ?
+        and mc.job = 'Director'
+        order by person_name asc;
+    `;
+
+    const keywordQuery = `
+        select distinct *
+        from movie
+        join movie_keywords mk on movie.movie_id = mk.movie_id
+        join keyword k on k.keyword_id = mk.keyword_id
+        where keyword_name like ?
+        order by title asc;
     `;
 
     // Execute the movie query
@@ -71,8 +85,15 @@ app.get('/buscar', (req, res) => {
                     results.directors = directorRows;
                 }
 
-                // Render the results page and pass the results object
-                res.render('resultado', { results });
+                // Execute the keyword query
+                db.all(keywordQuery, [`%${searchTerm}%`], (err, keywordRows) => {
+                    if (!err){
+                        results.keywords = keywordRows;
+                    }
+
+                    // Render the results page and pass the results object
+                    res.render('resultado', { results });
+                });
             });
         });
     });

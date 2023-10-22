@@ -19,6 +19,15 @@
         </ul>
     <% } %>
 
+    <% if (results.keywords.length > 0) { %>
+        <h2>Posibles Peliculas</h2>
+        <ul>
+            <% results.keywords.forEach((keyword) => { %>
+                <li><a href="/pelicula/<%= keyword.movie_id%>"><%= keyword.title %></a></li>
+            <% }); %>
+        </ul>
+    <% } %>
+
     <% if (results.actors.length > 0) { %>
         <h2>Actores</h2>
         <ul>
