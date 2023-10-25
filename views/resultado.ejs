@@ -30,20 +30,20 @@
 
     <% if (results.actors.length > 0) { %>
         <h2>Actores</h2>
-        <ul>
+        <div class="cast-container">
             <% results.actors.forEach((actor) => { %>
                 <li><a href="/actor/<%= actor.person_id %>"><%= actor.person_name %></a></li>
             <% }); %>
-        </ul>
+        </div>
     <% } %>
 
     <% if (results.directors.length > 0) { %>
         <h2>Directores</h2>
-        <ul>
+        <div class="crew-container">
             <% results.directors.forEach((director) => { %>
                 <li><a href="/director/<%= director.person_id %>"><%= director.person_name %></a></li>
             <% }); %>
-        </ul>
+        </div>
     <% } %>
 <% } %>
 
