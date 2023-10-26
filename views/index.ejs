@@ -4,6 +4,10 @@
     <title>MovieWeb</title>
     <style>
         body {
+            background-image: url('Net.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
             font-family: 'Arial', sans-serif;
             background-color: #F7E6C4;
             display: flex;
@@ -17,12 +21,12 @@
         .container {
             border-radius: 10px;
             padding: 20px;
-            text-align: center; /* Centrar el contenido */
+            text-align: center;
         }
 
         h1 {
             font-size: 100px;
-            color: #333333;
+            color: white;
             margin-bottom: 20px;
             padding: 10px;
             margin-top: 10px;
@@ -30,7 +34,8 @@
 
         .title-container {
             display: inline-block;
-            background-color: #FFF2D8;
+            backdrop-filter: blur(2px); /* Adjust the blur intensity as needed */
+            background-color: rgba(255, 255, 255, 0.01); /* Adjust the opacity as needed */
             border-radius: 10px;
             padding: 20px;
             margin-top: 10px;
@@ -49,6 +54,7 @@
             font-size: 18px;
             margin-right: 10px;
             outline: none;
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         button[type="submit"] {
@@ -79,3 +85,4 @@
 </div>
 </body>
 </html>
+

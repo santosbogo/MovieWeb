@@ -99,6 +99,48 @@ app.get('/buscar', (req, res) => {
     });
 });
 
+app.get('/persona/:id', (req, res) => {
+    const personId = req.query.q;
+
+    // Create an object to store the results for each category
+    const results2 = {
+        moviesActed: [],
+        moviesDirected: [],
+    };
+
+    // Search for movies where actor in them
+    const actorQuery = `
+        select distinct movie_id
+        from person p
+        join movie_cast mc on p.person_id = mc.person_id
+        where person_name like ?
+    `;
+
+    // Search for movies which is director
+    const directorQuery = `
+        select distinct movie_id
+        from person p
+        join movie_crew mc on p.person_id = mc.person_id
+        where person_name like ? AND mc.job = 'Director'
+    `;
+    // Execute queries
+    db.all(actorQuery, [personId], (err, actorMoviesRows) => {
+        if (!err) {
+            results2.moviesActed = actorMoviesRows;
+        }
+
+        // Execute the director query
+        db.all(directorQuery, [personId], (err, directorMoviesRows) => {
+            if (!err) {
+                results2.moviesDirected = directorMoviesRows;
+            }
+
+            // Render the results page and pass the results object
+            res.render('resultado', { results2 });
+        });
+    });
+});
+
 
 
 // Ruta para la página de datos de una película particular
@@ -221,7 +263,7 @@ app.get('/pelicula/:id', (req, res) => {
                     );
 
                     if (!isDuplicate) {
-                    // Si no existe, agregar los datos a la lista de elenco
+                        // Si no existe, agregar los datos a la lista de elenco
                         movieData.cast.push({
                             actor_id: row.actor_id,
                             actor_name: row.actor_name,
@@ -245,7 +287,7 @@ app.get('/pelicula/:id', (req, res) => {
                     if (!isDuplicate) {
                         // Si no existe, agregar los datos a la lista de crew
                         if (row.department_name !== 'Directing' && row.job !== 'Director'
-                        && row.department_name !== 'Writing' && row.job !== 'Writer') {
+                            && row.department_name !== 'Writing' && row.job !== 'Writer') {
                             movieData.crew.push({
                                 crew_member_id: row.crew_member_id,
                                 crew_member_name: row.crew_member_name,
