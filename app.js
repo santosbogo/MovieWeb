@@ -354,6 +354,67 @@ app.get('/director/:id', (req, res) => {
     });
 });
 
+// Ruta para conseguir la página de una persona
+app.get('/person/:id', (req, res) => {
+    const personId = req.params.id;
+
+    const results = {
+        actorName: '',
+        moviesActed: [],
+        moviesDirected: [],
+    };
+
+    const actorQuery = `
+        SELECT person_name
+        FROM person
+        WHERE person_id = ?;
+    `;
+
+    // Consulta SQL para obtener las películas en las que participó como actor
+    const actedQuery = `
+        SELECT m.*
+        FROM movie_cast mc
+        JOIN movie m ON mc.movie_id = m.movie_id
+        WHERE mc.person_id = ?;
+    `;
+
+    // Consulta SQL para obtener las películas en las que fue director
+    const directedQuery = `
+        SELECT m.*
+        FROM movie_crew mc
+        JOIN movie m ON mc.movie_id = m.movie_id
+        WHERE mc.person_id = ? AND mc.job = 'Director';
+    `;
+
+    // Ejecutar la consulta para películas en las que actuó
+    db.all(actedQuery, [personId], (err, actedRows) => {
+        if (!err) {
+            results.moviesActed = actedRows;
+
+            // Ejecutar la consulta para películas dirigidas
+            db.all(directedQuery, [personId], (err, directedRows) => {
+                if (!err) {
+                    results.moviesDirected = directedRows;
+
+                    db.get(actorQuery, [personId], (err, actorRow) => {
+                        if (!err) {
+                            results.actorName = actorRow.person_name; // Asigna el nombre del actor
+                        }
+
+                        // Renderiza la página de la persona and pasa los resultados
+                        res.render('person', results);
+                    });
+                } else {
+                    console.error(err);
+                    res.status(500).send('Error al cargar las películas dirigidas por la persona.');
+                }
+            });
+        } else {
+            console.error(err);
+            res.status(500).send('Error al cargar las películas en las que la persona actuó.');
+        }
+    });
+});
 
 // Iniciar el servidor
 app.listen(port, () => {

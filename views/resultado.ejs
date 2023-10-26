@@ -32,7 +32,7 @@
         <h2>Actores</h2>
         <div class="cast-container">
             <% results.actors.forEach((actor) => { %>
-                <li><a href="/actor/<%= actor.person_id %>"><%= actor.person_name %></a></li>
+                <li><a href="/person/<%= actor.person_id %>"><%= actor.person_name %></a></li>
             <% }); %>
         </div>
     <% } %>
@@ -41,7 +41,7 @@
         <h2>Directores</h2>
         <div class="crew-container">
             <% results.directors.forEach((director) => { %>
-                <li><a href="/director/<%= director.person_id %>"><%= director.person_name %></a></li>
+                <li><a href="/person/<%= director.person_id %>"><%= director.person_name %></a></li>
             <% }); %>
         </div>
     <% } %>
