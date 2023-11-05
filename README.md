@@ -12,3 +12,4 @@
 `Ignacio Chevallier`
 `Tomás Valle Duran`
 `Matias Chialva`
+`Felipe Fernandez Cronenbold`
