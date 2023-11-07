@@ -10,6 +10,7 @@
 
 <div class="director-writer-container">
     <div class="director-column">
+        <!-- Muestro el director -->
         <h3>Dirigida por:</h3>
         <ul>
             <% movie.directors.forEach((director) => { %>
@@ -21,6 +22,7 @@
     </div>
 
     <div class="writer-column">
+        <!-- Muestro el escritor -->
         <h3>Escrita por:</h3>
         <ul>
             <% movie.writers.forEach((writer) => { %>
@@ -32,10 +34,11 @@
     </div>
 </div>
 
-
+<!-- Muestro el argumento -->
 <h3>Argumento:</h3>
 <div id="overview" style="background-color: #FFFADD; padding: 20px; border-radius: 10px;" ><p><%= movie.overview %></p></div>
 
+<!-- Muestro el elenco con sus roles -->
 <h3>Elenco:</h3>
 <div class="cast-container">
     <% movie.cast.sort((a, b) => a.cast_order - b.cast_order).forEach((actor) => { %>
@@ -45,7 +48,7 @@
     <% }); %>
 </div>
 
-
+<!-- Muestro el crew con sus trabajos -->
 <h3>Crew:</h3>
 <div class="crew-container">
     <% movie.crew.forEach((crewMember) => { %>
@@ -55,7 +58,7 @@
     <% }); %>
 </div>
 
-
+<!-- Muestro los generos de la pelicula -->
 <h3>Géneros:</h3>
 <ul>
     <% movie.genres.forEach((genre) => { %>
@@ -63,6 +66,7 @@
     <% }); %>
 </ul>
 
+<!-- Muestro las empresas de producción con sus paises -->
 <h3>Empresas de Producción:</h3>
 <ul>
     <% movie.companies.forEach((company) => { %>
@@ -70,6 +74,7 @@
     <% }); %>
 </ul>
 
+<!-- Muestro las keywords -->
 <h3>Palabras Clave:</h3>
 <ul>
     <% movie.keywords.forEach((keyword) => { %>
@@ -77,6 +82,7 @@
     <% }); %>
 </ul>
 
+<!-- Muestro los idiomas -->
 <h3>Idiomas:</h3>
 <ul>
     <% movie.languages.forEach((language) => { %>
@@ -85,6 +91,7 @@
 </ul>
 
 <p></p>
+<!-- Boton para volver al buscador -->
 <div><a href="/"><button type="button" id="inicio" style="margin-bottom: 15px">Inicio</button></a></div>
 </body>
 </html>

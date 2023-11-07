@@ -7,10 +7,12 @@
 <body>
 <h1 style="background-color: #FFF2D8;  padding: 10px;  border-radius: 5px;">Resultado de la Búsqueda</h1>
 
+<!-- Muestro los resultados, si es que hay alguno -->
 <% if (results.movies.length === 0 && results.actors.length === 0 && results.directors.length === 0) { %>
     <p>No hay resultados.</p>
 <% } else { %>
 
+    <!-- Muestro los resultados de peliculas, si es que hay -->
     <% if (results.movies.length > 0) { %>
         <h2>Películas</h2>
         <ul>
@@ -20,6 +22,7 @@
         </ul>
     <% } %>
 
+    <!-- Muestro los resultados de peliculas con la keyword, si es que hay -->
     <% if (results.keywords.length > 0) { %>
         <h2>Posibles Peliculas con la Keyword: <%= searchTerm %></h2>
         <ul>
@@ -29,6 +32,7 @@
         </ul>
     <% } %>
 
+    <!-- Muestro los resultados de actores, si es que hay -->
     <% if (results.actors.length > 0) { %>
         <h2>Actores</h2>
         <div class="cast-container">
@@ -38,6 +42,7 @@
         </div>
     <% } %>
 
+    <!-- Muestro los resultados de directores, si es que hay -->
     <% if (results.directors.length > 0) { %>
         <h2>Directores</h2>
         <div class="crew-container">
@@ -49,7 +54,7 @@
 <% } %>
 
 <p></p>
-
+<!-- Boton para volver al buscador -->
 <div><a href="/"><button type="button" id="inicio">Inicio</button></a></div>
 </body>
 </html>

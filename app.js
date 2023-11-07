@@ -123,20 +123,32 @@ app.get('/pelicula/:id', (req, res) => {
       language_role.language_role,
       language.language_name
     FROM movie
+    -- Busco cast
     LEFT JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
     LEFT JOIN person as actor ON movie_cast.person_id = actor.person_id
+    
+    -- Busco crew
     LEFT JOIN movie_crew ON movie.movie_id = movie_crew.movie_id
     LEFT JOIN department ON movie_crew.department_id = department.department_id
     LEFT JOIN person as crew_member ON crew_member.person_id = movie_crew.person_id
 
+    -- Busco generos
     left join movie_genres on movie.movie_id = movie_genres.movie_id
     left join genre on movie_genres.genre_id = genre.genre_id
+    
+    -- Busco paises
     left join production_country on movie.movie_id = production_country.movie_id
     left join country on production_country.country_id = country.country_id
+    
+    -- Busco productoras
     left join movie_company on movie.movie_id = movie_company.movie_id
     left join production_company on movie_company.company_id = production_company.company_id
+    
+    -- Busco keywords
     left join movie_keywords on movie.movie_id = movie_keywords.movie_id
     left join keyword on movie_keywords.keyword_id = keyword.keyword_id
+    
+    -- Busco idiomas
     left join movie_languages on movie.movie_id = movie_languages.movie_id
     left join language_role on movie_languages.language_role_id = language_role.role_id
     left join language on movie_languages.language_id = language.language_id
