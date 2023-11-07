@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-// Ruta para buscar películas, actores y directores
+// Ruta para buscar películas, actores, directores y keywords
 app.get('/buscar', (req, res) => {
     const searchTerm = req.query.q;
 
@@ -99,50 +99,6 @@ app.get('/buscar', (req, res) => {
         });
     });
 });
-
-app.get('/persona/:id', (req, res) => {
-    const personId = req.query.q;
-
-    // Create an object to store the results for each category
-    const results2 = {
-        moviesActed: [],
-        moviesDirected: [],
-    };
-
-    // Search for movies where actor in them
-    const actorQuery = `
-        select distinct movie_id
-        from person p
-        join movie_cast mc on p.person_id = mc.person_id
-        where person_name like ?
-    `;
-
-    // Search for movies which is director
-    const directorQuery = `
-        select distinct movie_id
-        from person p
-        join movie_crew mc on p.person_id = mc.person_id
-        where person_name like ? AND mc.job = 'Director'
-    `;
-    // Execute queries
-    db.all(actorQuery, [personId], (err, actorMoviesRows) => {
-        if (!err) {
-            results2.moviesActed = actorMoviesRows;
-        }
-
-        // Execute the director query
-        db.all(directorQuery, [personId], (err, directorMoviesRows) => {
-            if (!err) {
-                results2.moviesDirected = directorMoviesRows;
-            }
-
-            // Render the results page and pass the results object
-            res.render('resultado', { results2 });
-        });
-    });
-});
-
-
 
 // Ruta para la página de datos de una película particular
 app.get('/pelicula/:id', (req, res) => {
