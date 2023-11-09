@@ -66,6 +66,18 @@
     <% }); %>
 </ul>
 
+<h3>Paises de Produccion:</h3>
+<ul>
+    <% 
+    const uniqueCountries = new Set();
+    movie.companies.forEach((company) => { 
+        uniqueCountries.add(company.country_name);
+    });
+    
+    Array.from(uniqueCountries).forEach((country) => { %>
+        <li><%= country %></li>
+    <% }); %>
+</ul>
 <!-- Muestro las empresas de producción con sus paises -->
 <h3>Empresas de Producción:</h3>
 <ul>
