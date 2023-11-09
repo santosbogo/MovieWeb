@@ -45,7 +45,7 @@
 
     <!-- Muestro los resultados de peliculas con la keyword, si es que hay -->
     <% if (results.keywords.length > 0) { %>
-        <h2>Posibles Peliculas con la Keyword: <%= searchTerm %></h2>
+        <h2>Peliculas con la Keyword: <%= searchTerm %></h2>
         <ul>
             <% results.keywords.forEach((keyword) => { %>
                 <li><a href="/pelicula/<%= keyword.movie_id%>"><%= keyword.title %></a></li>
