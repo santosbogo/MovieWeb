@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="icon" href="pelicula.png" type="image/x-icon">
     <title>MovieWeb</title>
     <style>
         body {
@@ -41,6 +42,7 @@
             margin-top: 10px;
         }
 
+
         form {
             text-align: center;
             margin-top: 20px;
@@ -55,12 +57,14 @@
             margin-right: 10px;
             outline: none;
             background-color: rgba(255, 255, 255, 0.1);
+            color: white;
         }
 
+
         button[type="submit"] {
-            background-color: #12486B;
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
-            border: none;
+            border: 1px black solid;
             border-radius: 4px;
             padding: 12px 20px;
             font-size: 18px;
@@ -69,7 +73,8 @@
         }
 
         button[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: rgba(255, 255, 255, 0);
+            border: none;
         }
     </style>
 </head>
@@ -80,7 +85,9 @@
     </div>
     <!-- Input del buscador -->
     <form action="/buscar" method="GET">
-        <input type="text" name="q" placeholder="Buscar..." />
+        <label>
+            <input type="text" name="q"/>
+        </label>
         <button type="submit">Buscar</button>
     </form>
 </div>
