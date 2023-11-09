@@ -43,7 +43,7 @@
 <div class="cast-container">
     <% movie.cast.sort((a, b) => a.cast_order - b.cast_order).forEach((actor) => { %>
         <div class="cast-item">
-            <a href="/actor/<%= actor.actor_id %>"><%= actor.actor_name %></a> - <%= actor.character_name %>
+            <a href="/person/<%= actor.actor_id %>"><%= actor.actor_name %></a> - <%= actor.character_name %>
         </div>
     <% }); %>
 </div>
